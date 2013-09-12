@@ -1,4 +1,4 @@
 travis
 ======
 
-Travis - Trafic Visualizer
+Travis - Traffic Visualizer
