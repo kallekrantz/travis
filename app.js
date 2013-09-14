@@ -32,7 +32,7 @@ function rt2latlon(x, y) {
 function addObjects(objects) {
     var i = 0;
     objects.forEach(function (v, k) {
-        if (k > 200)
+        if (k > 800)
             return;
         var mesh, material;
         
