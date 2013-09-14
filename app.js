@@ -4,7 +4,7 @@ var apiUrl = 'http://api.apitekt.se/transportstyrelsen/olyckor-2003-2012/list.js
 var fov = 53.13010235415599;
 var camera, scene, renderer;
 var geometry, material, mesh;
-
+var slab;
 
 function initialize() {
     initMap();
@@ -35,7 +35,7 @@ function addObjects(objects) {
         if (k > 200)
             return;
         var mesh, material;
-        
+
         switch (v['svarhetsgrad'][0]) {
         case 'L':
             material = slightMaterial;
@@ -49,9 +49,9 @@ function addObjects(objects) {
         default:
             material = defaultMaterial;
             break;
-            
+
         }
-        
+
         mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
@@ -80,10 +80,10 @@ function updateCamera () {
 
     var xy = map.getCenter();
 
-    var s = map.getBounds().getSouthWest().lng();
-    var w = map.getBounds().getSouthWest().lat();
-    var n = map.getBounds().getNorthEast().lng();
-    var e = map.getBounds().getNorthEast().lat();
+    var w = map.getBounds().getSouthWest().lng();
+    var s = map.getBounds().getSouthWest().lat();
+    var e = map.getBounds().getNorthEast().lng();
+    var n = map.getBounds().getNorthEast().lat();
 
     var width = e - w;
     var height = n - s;
@@ -91,10 +91,16 @@ function updateCamera () {
     camera.position.set(
         xy.lng(),
         xy.lat(),
-        width
+        height*0.7
     );
 
-    camera.aspect = height/width;
+    camera.position.y -= height*0.7;
+    camera.rotation.set(Math.PI/4, 0, 0);
+    
+
+    replaceSlab(xy.lng(), xy.lat(), width, height);
+
+    camera.aspect = width/height;
     camera.updateProjectionMatrix();
 
     camera.updateMatrix();
@@ -112,17 +118,18 @@ function initThree() {
     function init() {
 
         camera = new THREE.PerspectiveCamera( fov, 1 //window.innerWidth / window.innerHeight
-                                              , 0.000001, 10000 );
+                                              , 0.0000001, 10000 );
 
 
         scene = new THREE.Scene();
+
 
         geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
 
         deathMaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
         severeMaterial = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
         slightMaterial = new THREE.MeshLambertMaterial( { color: 0x00aa00 } );
-        defaultMaterial = new THREE.MeshLambertMaterial( { color: 0x000000 } );
+        defaultMaterial = new THREE.MeshLambertMaterial( { color: 0x333333 } );
 
 
         var pointLight1 = new THREE.PointLight(0xFFFFFF);
@@ -148,6 +155,8 @@ function initThree() {
 
     }
 
+
+
     function animate() {
 
         // note: three.js includes requestAnimationFrame shim
@@ -160,6 +169,29 @@ function initThree() {
         renderer.render( scene, camera );
 
     }
+}
+
+
+
+
+function replaceSlab(x, y, width, height) {
+    if (slab) {
+        scene.remove(slab);
+    }
+    var mat = new THREE.MeshBasicMaterial({color: 0x00aa00, opacity: 0.5});
+    slab = new THREE.Mesh(new THREE.CubeGeometry(width, height, 0.0001), mat);
+//    scene.add(slab);
+//    slab.position.set(x, y, 0);
+//    console.log(x);
+//    console.log(y);
+
+    slab.position.set(linkoping.x, linkoping.y, 0);
+    slab.position.set(x, y, 0);
+
+    
+//    console.log(x);
+  
+//  console.log(y);
 }
 
 
