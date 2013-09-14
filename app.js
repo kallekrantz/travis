@@ -70,10 +70,30 @@ function addObjects(objects, filter) {
     objects = filterObjects(objects, filter);
     console.log(objects.length);
     objects.forEach(function (v, k) {
-        mesh = new THREE.Mesh( geometry, material );
+//        mesh.position = new THREE.Vector3(x, y, 0);
+        if (k > 200)
+            return;
+        var mesh, material;
+        
+        switch (v['svarhetsgrad'][0]) {
+        case 'L':
+            material = slightMaterial;
+            break;
+        case 'S':
+            material = severeMaterial;
+            break;
+        case 'D':
+            material = deathMaterial;
+            break;
+        default:
+            material = defaultMaterial;
+            break;
+            
+        }
+        
+        mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
-//        mesh.position = new THREE.Vector3(x, y, 0);
 
     });
 
@@ -98,15 +118,15 @@ function updateCamera () {
     }
 
     var xy = map.getCenter();
-        
+
     var s = map.getBounds().getSouthWest().lng();
     var w = map.getBounds().getSouthWest().lat();
     var n = map.getBounds().getNorthEast().lng();
     var e = map.getBounds().getNorthEast().lat();
-    
+
     var width = e - w;
     var height = n - s;
-    
+
     camera.position.set(
         xy.lng(),
         xy.lat(),
@@ -115,7 +135,7 @@ function updateCamera () {
 
     camera.aspect = height/width;
     camera.updateProjectionMatrix();
-    
+
     camera.updateMatrix();
     camera.updateMatrixWorld();
 
@@ -131,17 +151,33 @@ function initThree() {
     function init() {
 
         camera = new THREE.PerspectiveCamera( fov, 1 //window.innerWidth / window.innerHeight
-, 0.000001, 10000 );
+                                              , 0.000001, 10000 );
 
 
         scene = new THREE.Scene();
 
-        geometry = new THREE.CubeGeometry( 0.002, 0.002, 0.002 );
-        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+        geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
 
+        deathMaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
+        severeMaterial = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
+        slightMaterial = new THREE.MeshLambertMaterial( { color: 0x00aa00 } );
+        defaultMaterial = new THREE.MeshLambertMaterial( { color: 0x000000 } );
+
+
+        var pointLight1 = new THREE.PointLight(0xFFFFFF);
+        pointLight1.position.x = 10;
+        pointLight1.position.y = 50;
+        pointLight1.position.z = 130;
+        scene.add(pointLight1);
+
+        var pointLight2 = new THREE.PointLight(0xFFFFFF);
+        pointLight2.position.x = 80;
+        pointLight2.position.y = -50;
+        pointLight2.position.z = 20;
+        scene.add(pointLight2);
 
         var container = document.getElementById('three-canvas');
-        
+
         renderer = new THREE.CanvasRenderer();
         renderer.setSize($(container).width(), $(container).height());
 
@@ -156,13 +192,13 @@ function initThree() {
         // note: three.js includes requestAnimationFrame shim
         requestAnimationFrame( animate );
 
-//        mesh.rotation.x += 0.01;
-//        mesh.rotation.y += 0.02;
+        //        mesh.rotation.x += 0.01;
+        //        mesh.rotation.y += 0.02;
         updateCamera();
 
         renderer.render( scene, camera );
 
-    }    
+    }
 }
 
 
@@ -174,10 +210,6 @@ $(document).ready(function() {
     console.log("woot");
     $(window).resize(function () {
         updateCamera();
-        
+
     });
 });
-
-
-
-

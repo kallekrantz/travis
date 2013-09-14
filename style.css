@@ -1,5 +1,5 @@
 html { height: 100% }
-body { height: 100%; margin: 0; padding: 0 }
+body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
 
-#map-canvas { position: absolute; height: 600px; width: 600px }
-#three-canvas { position: absolute; height: 600px; width: 600px; pointer-events:none;} 
+#map-canvas { position: absolute; height: 100%; width: 100% }
+#three-canvas { position: absolute; height: 100%; width: 100%; pointer-events:none;} 
