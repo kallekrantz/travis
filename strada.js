@@ -6,7 +6,7 @@ var strada = function(){
         init: function(callback){
             $.getJSON(url, function(data){
                 stradaData = data;
-                callback();
+                callback(data);
             }).fail(function(error){
                 console.log("Failed parsing of strada-json");
                 console.log(error);

@@ -9,7 +9,39 @@ var geometry, material, mesh;
 function initialize() {
     initMap();
     initThree();
-    strada.init();
+    strada.init(addObjects);
+}
+
+
+
+function rt2latlon(x, y) {
+    swedish_params('rt90_2.5_gon_v');
+
+    var lat_lon = grid_to_geodetic(x, y);
+    latitude = lat_lon[0];
+    longitude = lat_lon[1];
+
+    return new THREE.Vector3(
+        longitude,
+        latitude,
+        0
+    );
+}
+
+
+function addObjects(objects) {
+    var i = 0;
+    objects.forEach(function (v, k) {
+        if (k > 500)
+            return;
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add(mesh);
+        mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
+//        mesh.position = new THREE.Vector3(x, y, 0);
+
+        console.log(i);
+    });
+
 }
 
 function initMap() {
@@ -72,9 +104,6 @@ function initThree() {
         geometry = new THREE.CubeGeometry( 0.002, 0.002, 0.002 );
         material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-        mesh.position = linkoping;
 
         var container = document.getElementById('three-canvas');
         
