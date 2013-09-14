@@ -9,7 +9,19 @@ var geometry, material, mesh;
 function initialize() {
     initMap();
     initThree();
-    strada.init();
+    strada.init(addObjects);
+}
+
+function addObjects(objects) {
+    objects.forEach(function (v, k) {
+        if (k > 1000)
+            return;
+        mesh = new THREE.Mesh( geometry, material );
+        scene.add(mesh);
+        mesh.position = linkoping;
+    });
+    console.log(objects);
+
 }
 
 function initMap() {
@@ -70,11 +82,8 @@ function initThree() {
         scene = new THREE.Scene();
 
         geometry = new THREE.CubeGeometry( 0.002, 0.002, 0.002 );
-        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: false } );
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-        mesh.position = linkoping;
 
         var container = document.getElementById('three-canvas');
         
