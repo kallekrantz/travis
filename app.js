@@ -9,7 +9,18 @@ var geometry, material, mesh;
 function initialize() {
     initMap();
     initThree();
-    strada.init(addObjects);
+    strada.init(function(objects){
+        addObjects(objects, {svarhetsgrad:'Lindrig olycka', ljusforhallande: "Dagsljus", });
+        setTimeout(function(){
+            clearObjects();
+            setTimeout(function(){
+                addObjects(objects, {svarhetsgrad:'Lindrig olycka'});
+            },2000);
+        }, 2000);
+        
+        
+
+    });
 }
 
 
@@ -28,18 +39,42 @@ function rt2latlon(x, y) {
     );
 }
 
+function clearObjects(){
+    var obj, i;
+    for ( i = scene.children.length - 1; i >= 0 ; i -- ) {
+        obj = scene.children[ i ];
+        if ( obj !== camera) {
+            scene.remove(obj);
+        }
+    }
+}
 
-function addObjects(objects) {
+function filterObjects(objects, filter){
+    if(Object.keys(filter).length === 0){
+        return objects;
+    }
+    Object.keys(filter).forEach(function(key){
+        objects = objects.filter(function(object){
+            if(object[key] == filter[key]){
+                return true;
+            }
+        })
+    });
+    return objects
+}
+
+function addObjects(objects, filter) {
+    (typeof filter === "undefined") ? {} : filter;
     var i = 0;
+    console.log(objects.length);
+    objects = filterObjects(objects, filter);
+    console.log(objects.length);
     objects.forEach(function (v, k) {
-        if (k > 500)
-            return;
         mesh = new THREE.Mesh( geometry, material );
         scene.add(mesh);
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
 //        mesh.position = new THREE.Vector3(x, y, 0);
 
-        console.log(i);
     });
 
 }
