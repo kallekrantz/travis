@@ -7,12 +7,9 @@ var geometry, material, mesh;
 
 
 function initialize() {
-
-//    setTimeout(function () {
-        initMap();
-        initThree();
-        
-//    }, 1000);
+    initMap();
+    initThree();
+    strada.init();
 }
 
 function initMap() {
@@ -49,11 +46,8 @@ function updateCamera () {
         width
     );
 
-    camera.aspect = 1/(width/height);//width/height;
-
+    camera.aspect = height/width;
     camera.updateProjectionMatrix();
-//    camera.updateMatrix();
- //   camera.updateMatrixWorld();
     
     camera.updateMatrix();
     camera.updateMatrixWorld();
@@ -71,7 +65,6 @@ function initThree() {
 
         camera = new THREE.PerspectiveCamera( fov, 1 //window.innerWidth / window.innerHeight
 , 0.000001, 10000 );
-//        camera.position.z = 1000;
 
 
         scene = new THREE.Scene();
@@ -107,6 +100,7 @@ function initThree() {
 
     }    
 }
+
 
 
 
