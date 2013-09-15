@@ -81,14 +81,26 @@ function colorMeshes(meshes, colorMap){
 
 function filterMeshes(meshes, filter){
     var unfilt = [], filt = [];
+    var firstrun = true;
     if(Object.keys(filter).length === 0){
         return {filtered:meshes, unfiltered:unfilt};
     }
     Object.keys(filter).forEach(function(key){
+        if (firstrun == false){
+            meshes = filt;
+            filt = []
+        }
         if (typeof filter[key] === 'string'){
             filter[key] = [filter[key]];
         }
+        if (typeof filter[key] === 'number'){
+            filter[key] = [filter[key]];
+        }
+        if(filter[key].length === 0){
+            return;
+        }
         filter[key].forEach(function(singleFilter){
+            console.log(key + " " + singleFilter );
             meshes.forEach(function(mesh){
                 if(mesh.foundInFilter === true){
                     return;
@@ -110,8 +122,9 @@ function filterMeshes(meshes, filter){
             if(mesh.foundInFilter === false){
                 unfilt.push(mesh);
             }
-            mesh.foundInFilter = false;
+            mesh.foundInFilter = undefined;
         });
+        firstrun = false;
     });
     return {filtered:filt, 
             unfiltered:unfilt
@@ -146,12 +159,9 @@ function monthFilter(month){
 function monthAndYearFilter(year, month){
     return filterVisibleMeshes(scene.children, {ar:year, manad:month});
 }
-
-function siteFilter(siteType){
-    return filterVisibleMeshes(scene.children, {platstyp:siteType});
+function accidentFilter(selected, years){
+    return filterVisibleMeshes(scene.children, {olyckstyp:selected, ar:years})
 }
-
-
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
@@ -331,6 +341,7 @@ function replaceSlab(x, y, width, height) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
+    
     $(window).resize(function () {
         updateCamera();
     });
