@@ -171,7 +171,7 @@ function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
-        if (k > 500)
+        if (k > 3000)
             return;
         var mesh, material;
         material = new THREE.MeshLambertMaterial();
