@@ -50,13 +50,13 @@
         <div class="container">
           <div class="col-lg-4">
             <h3>Filtrera efter olyckstyp</h3>
-            <div><input type="checkbox" id="S" /> <label for="S">Singelolycka</label></div>
-            <div><input type="checkbox" id="M" /> <label for="M">Mötesolycka</label></div>
-            <div><input type="checkbox" id="O" /> <label for="O">Omkörningsolycka<label></div>
-            <div><input type="checkbox" id="U" /> <label for="U">Upphinnandeolycka</label></div>
-            <div><input type="checkbox" id="A" /> <label for="A">Avsvängningsolycka</label></div>
-            <div><input type="checkbox" id="C" /> <label for="C">Cykel/Moped kollision med m.fordon</label></div>
-            <div><input type="checkbox" id="V" /> <label for="V">Viltolycka</label></div>
+            <div><input type="checkbox" id="S" onclick="updateFilter()" /> <label for="S">Singelolycka</label></div>
+            <div><input type="checkbox" id="M" onclick="updateFilter()"/> <label for="M">Mötesolycka</label></div>
+            <div><input type="checkbox" id="O" onclick="updateFilter()"/> <label for="O">Omkörningsolycka<label></div>
+            <div><input type="checkbox" id="U" onclick="updateFilter()"/> <label for="U">Upphinnandeolycka</label></div>
+            <div><input type="checkbox" id="A" onclick="updateFilter()"/> <label for="A">Avsvängningsolycka</label></div>
+            <div><input type="checkbox" id="C" onclick="updateFilter()"/> <label for="C">Cykel/Moped kollision med m.fordon</label></div>
+            <div><input type="checkbox" id="V" onclick="updateFilter()"/> <label for="V">Viltolycka</label></div>
           </div>
           <div id="roadSelect" class="col-lg-2 vis-select" onclick="visRoad()">
             <h3>Väglag</h3>

@@ -131,7 +131,7 @@ function filterMeshes(meshes, filter){
            };
 }
 
-function filterColoredMeshed(attribute, optionList, defColor){
+function filterColoredMeshes(attribute, optionList, defColor){
     colorMeshes(scene.children, {attribute: {maps: optionList, defaultColor:defColor}});
 }
 
@@ -381,30 +381,113 @@ $(function() {
 function makeSelection(id) {
     $(".vis-select").css('opacity', 0.2);
     $(id).css('opacity', 1);
-
-    
 }
 
 
 function visRoad() 
 {
     makeSelection('#roadSelect');
+    var attribute = "vaglag";
+    var colorMap = [
+        {
+            color: 0xFFFFFF,
+            value: "Vagbanan torr"
+        },
+        {
+            color: 0xAAAAFF,
+            value: "Vagbanan vat/fuktig"
+        },
+        {
+            color: 0x4444FF,
+            value: "Tunn is, vagbanan synlig"
+        },
+        {
+            color: 0xAAAAAA,
+            value: "Tjock is / packad sno"
+        },
+        {
+            color: 0x888888,
+            value: "Los sno / snomodd"
+        }
+    ];
+    var defaultColor = 0xFF00FF;
+    filterColorMeshes(attribute, colorMap, defaultColor)
+
 }
 
 
 
 function visLight() {
     makeSelection('#lightSelect');
+    var attribute = "ljusforhallande";
+    var colorMap = [
+        {
+            color: 0x4444FF,
+            value: "Dagsljus"
+        },
+        {
+            color: 0xBB4444,
+            value: "Morker"
+        },
+        {
+            color: 333333,
+            value: "Gryning/skymning"
+        }
+    ]
+    var defaultColor = 0xFF00FF;
+    filterColorMeshes(attribute, colorMap, defaultColor);
 }
 
 
 function visWeather() {
     makeSelection('#weatherSelect');
+    var attribute = "vaderleksforhallanden";
+    var colorMap = [
+        {
+            color: 0xAAAAAA,
+            value: "Uppehallsvader"
+        },
+        {
+            color: 0x4444FF,
+            value: "Regn"
+        },
+        {
+            color: 0x88BBBB,
+            value: "Dis/dimma"
+        },
+        {
+            color: 0xFFFF00,
+            value: "Snoblandat regn"
+        },
+        {
+            color: 0xFF00FF,
+            value: "Snofall"
+        }
+    ]
+    var defaultColor = 0xFF00FF;
+    filterColorMeshes(attribute, colorMap, defaultColor);
 }
 
 
 function visOutcome() {
     makeSelection('#outcomeSelect');
+    var attribute = "svarhetsgrad";
+    var colorMap = [
+        {
+            color: 0xFF0000,
+            value: "Lindrig olycka"
+        },
+        {
+            color: 0xFFFF00,
+            value: "Dodsolycka"
+        },
+        {
+            color: 0x00AA00,
+            value: "Svar olycka"
+        }
+    ]
+    var defaultColor = 0xFF00FF;
+    filterColorMeshes(attribute, colorMap, defaultColor);
 }
 
 function updateFilter(){
