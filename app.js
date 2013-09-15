@@ -29,7 +29,7 @@ function initialize() {
         }, 2000);
         */
         addObjects(objects, {});
-    })
+    });
 }
 
 
