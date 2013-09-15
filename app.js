@@ -159,8 +159,8 @@ function monthFilter(month){
 function monthAndYearFilter(year, month){
     return filterVisibleMeshes(scene.children, {ar:year, manad:month});
 }
-function accidentFilter(selected, years){
-    return filterVisibleMeshes(scene.children, {olyckstyp:selected, ar:years})
+function accidentFilter(selected, startYear, endYear){
+    return filterVisibleMeshes(scene.children, {olyckstyp:selected, ar:spanYear(startYear, endYear)})
 }
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
@@ -198,6 +198,13 @@ function addObjects(objects, filter) {
     });
 }
 
+function spanYear(begin, end){
+    var out = [];
+    for(var i = begin; i <=end; i++){
+        out.push(i);
+    }
+    return out;
+}
 
 function updateObjects() {
     scene.children.forEach(function (c) {
