@@ -8,25 +8,25 @@ var slab;
 var wBound, sBound, eBound, nBound;
 
 function encode_utf8(s) {
-  return unescape(encodeURIComponent(s));
+    return unescape(encodeURIComponent(s));
 }
 
 function decode_utf8(s) {
-  return decodeURIComponent(escape(s));
+    return decodeURIComponent(escape(s));
 }
 
 function initialize() {
     initMap();
     initThree();
     strada.init(function(objects){
-        
+
         /*        addObjects(objects, {svarhetsgrad:'Lindrig olycka', ljusforhallande: "Dagsljus", });
-        setTimeout(function(){
-            clearObjects();
-            setTimeout(function(){
-                addObjects(objects, {svarhetsgrad:'Lindrig olycka'});
-            },2000);
-        }, 2000);
+                  setTimeout(function(){
+                  clearObjects();
+                  setTimeout(function(){
+                  addObjects(objects, {svarhetsgrad:'Lindrig olycka'});
+                  },2000);
+                  }, 2000);
         */
         addObjects(objects, {});
     });
@@ -98,7 +98,7 @@ function filterMeshes(meshes, filter){
             unfilt.push(mesh);
         });
     });
-    return {filtered:filt, 
+    return {filtered:filt,
             unfiltered:unfilt
            };
 }
@@ -128,8 +128,8 @@ function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
-//        mesh.position = new THREE.Vector3(x, y, 0);
-        if (k > 30000)
+        //        mesh.position = new THREE.Vector3(x, y, 0);
+        if (k > 20)
             return;
         var mesh, material;
 
@@ -172,7 +172,7 @@ function updateObjects() {
             } else {
                 c.visible = true;
             }
-            
+
             if (c.position.y > nBound || c.position.y < sBound) {
                 c.visible = false;
             }
@@ -217,15 +217,15 @@ function updateCamera () {
 
     camera.position.y -= height*0.7;
     camera.rotation.set(Math.PI/4, 0, 0);
-    
+
 
     replaceSlab(xy.lng(), xy.lat(), width, height);
 
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
 
-//    camera.updateMatrix();
-//    camera.updateMatrixWorld();
+    //    camera.updateMatrix();
+    //    camera.updateMatrixWorld();
 
 }
 
@@ -243,8 +243,8 @@ function initThree() {
         scene = new THREE.Scene();
 
 
- //       geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
-//        geometry = new THREE.CylinderGeometry(0, 30, 80, 4, 1, true);
+        //       geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
+        //        geometry = new THREE.CylinderGeometry(0, 30, 80, 4, 1, true);
         geometry = new THREE.CylinderGeometry(0, 0.001, 0.002, 10, 1, false);
 
         deathMaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
@@ -292,7 +292,7 @@ function replaceSlab(x, y, width, height) {
     }
     var mat = new THREE.MeshBasicMaterial({color: 0x00aa00, opacity: 0.5});
     slab = new THREE.Mesh(new THREE.CubeGeometry(width, height, 0.0001), mat);
-//    scene.add(slab);
+    //    scene.add(slab);
     slab.position.set(linkoping.x, linkoping.y, 0);
     slab.position.set(x, y, 0);
 }
@@ -306,4 +306,23 @@ $(document).ready(function() {
     $(window).resize(function () {
         updateCamera();
     });
+});
+
+
+$(function() {
+    console.log("woo");
+    console.log($("#slider-range"));
+    
+    $("#slider-range").slider({
+        range: true,
+        min: 2003,
+        max: 2012,
+        values: [ 2006, 2012 ],
+        slide: function( event, ui ) {
+            //            $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+            console.log("yo");
+        }
+    });
+//    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+ //                       " - $" + $( "#slider-range" ).slider( "values", 1 ) );
 });
