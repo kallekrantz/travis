@@ -43,6 +43,7 @@ label {
 }
 
 #slider-range {
+    margin-top: 5px;
     margin-bottom: 5px;
 }
 
@@ -54,4 +55,21 @@ label {
 }
 #slider-labels td {
     text-align: center;
+}
+
+
+
+.thumb {
+    border-radius: 3px;
+    width: 12px;
+    height: 12px;
+    background-color: #000;
+    float: left;
+    margin-top: 0.4em;
+    margin-right: 0.2em;
+    border: 1px solid #000;
+}
+
+.vis-select {
+    cursor: pointer;
 }

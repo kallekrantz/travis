@@ -50,54 +50,53 @@
         <div class="container">
           <div class="col-lg-4">
             <h3>Filtrera efter olyckstyp</h3>
-            <div><input type="checkbox" id="S" /><label for="S">Singelolycka</label></div>
-            <div><input type="checkbox" id="M" /><label for="S">Mötesolycka</label></div>
-            <div><input type="checkbox" id="O" /><label for="S">Omkörningsolycka<label></div>
-            <div><input type="checkbox" id="U" /><label for="S">Upphinnandeolycka</label></div>
-            <div><input type="checkbox" id="A" /><label for="S">Avsvängningsolycka</label></div>
-            <div><input type="checkbox" id="C" /><label for="S">Cykel/Moped kollision med m.fordon</label></div>
-            <div><input type="checkbox" id="V" /><label for="S">Viltolycka</label></div>
-            <div><input type="checkbox" id="all" /><label for="S">Visa allt</label></div>
+            <div><input type="checkbox" id="S" /> <label for="S">Singelolycka</label></div>
+            <div><input type="checkbox" id="M" /> <label for="M">Mötesolycka</label></div>
+            <div><input type="checkbox" id="O" /> <label for="O">Omkörningsolycka<label></div>
+            <div><input type="checkbox" id="U" /> <label for="U">Upphinnandeolycka</label></div>
+            <div><input type="checkbox" id="A" /> <label for="A">Avsvängningsolycka</label></div>
+            <div><input type="checkbox" id="C" /> <label for="C">Cykel/Moped kollision med m.fordon</label></div>
+            <div><input type="checkbox" id="V" /> <label for="V">Viltolycka</label></div>
           </div>
-          <div class="col-lg-2">
+          <div id="roadSelect" class="col-lg-2 vis-select" onclick="visRoad()">
             <h3>Väglag</h3>
             <ul>
-                <li>Lös snö</li>
-                <li>snö/snömodd</li>
-                <li>Tjock is/ packad snö</li>
-                <li>Tunn is / vägbanan synlig</li>
-                <li>Vägbanan torr/fuktig</li>
-                <li>Vägbanan torr</li>
+                <li><div class="thumb" style="background-color: #fff;"></div>Lös snö</li>
+                <li><div class="thumb" style="background-color: #aaf;"></div>snö/snömodd</li>
+                <li><div class="thumb" style="background-color: #44f;"></div>Tjock is/ packad snö</li>
+                <li><div class="thumb" style="background-color: #aaa;"></div>Tunn is / vägbanan synlig</li>
+                <li><div class="thumb" style="background-color: #888;"></div>Vägbanan torr/fuktig</li>
+                <li><div class="thumb" style="background-color: #444;"></div>Vägbanan torr</li>
             </ul>
           </div>
 
-          <div class="col-lg-2">
+          <div id="lightSelect" class="col-lg-2 vis-select"  onclick="visLight()">
             <h3>Ljus</h3>
             <ul>
-            <li>Dagsljus</li>
-            <li>Gryning/skymning</li>
-            <li>Mörker</li>
-            <li>Okänt</li>
+            <li><div class="thumb" style="background-color: #44f;"></div>Dagsljus</li>
+            <li><div class="thumb" style="background-color: #b44;"></div>Gryning/skymning</li>
+            <li><div class="thumb" style="background-color: #333;"></div>Mörker</li>
+            <li><div class="thumb" style="background-color: #f0f;"></div>Okänt</li>
             </ul>
           </div>
-          <div class="col-lg-2">
+          <div id="weatherSelect" class="col-lg-2 vis-select"  onclick="visWeather()">
             <h3>Väderlek</h3>
             <ul>
-            <li>Dis/dimma</li>
-            <li>Regn</li>
-            <li>Snöblandat regn</li>
-            <li>Snöfall</li>
-            <li>Uppehållsväder</li>
-            <li>Okänt</li>
+            <li><div class="thumb" style="background-color: #aaa;"></div>Dis/dimma</li>
+            <li><div class="thumb" style="background-color: #44f;"></div>Regn</li>
+            <li><div class="thumb" style="background-color: #8bb;"></div>Snöblandat regn</li>
+            <li><div class="thumb" style="background-color: #fff;"></div>Snöfall</li>
+            <li><div class="thumb" style="background-color: #ff0;"></div>Uppehållsväder</li>
+            <li><div class="thumb" style="background-color: #f0f;"></div>Okänt</li>
             </ul>
           </div>
 
-          <div class="col-lg-2">
+          <div id="outcomeSelect" class="col-lg-2 vis-select" onclick="visOutcome()">
             <h3>Utgång</h3>
             <ul>
-            <li>Dödsolycka</li>
-            <li>Svår olycka</li>
-            <li>Lindrig olycka</li>
+            <li><div class="thumb" style="background-color: #f00;"></div>Dödsolycka</li>
+            <li><div class="thumb" style="background-color: #ff0;"></div>Svår olycka</li>
+            <li><div class="thumb" style="background-color: #0a0;"></div>Lindrig olycka</li>
             </ul>
           </div>
         </div>

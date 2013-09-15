@@ -355,6 +355,12 @@ $(document).ready(function() {
 
 
 $(function() {
+    $('.vis-select').css('opacity', 0.2);
+
+    $('.vis-select').click(function (event) {
+    });
+                           
+
     console.log("woo");
     console.log($("#slider-range"));
     
@@ -371,3 +377,33 @@ $(function() {
 //    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
  //                       " - $" + $( "#slider-range" ).slider( "values", 1 ) );
 });
+
+
+function makeSelection(id) {
+    $(".vis-select").css('opacity', 0.2);
+    $(id).css('opacity', 1);
+
+    
+}
+
+
+function visRoad() 
+{
+    makeSelection('#roadSelect');
+}
+
+
+
+function visLight() {
+    makeSelection('#lightSelect');
+}
+
+
+function visWeather() {
+    makeSelection('#weatherSelect');
+}
+
+
+function visOutcome() {
+    makeSelection('#outcomeSelect');
+}
