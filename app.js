@@ -7,10 +7,19 @@ var slab;
 
 var wBound, sBound, eBound, nBound;
 
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
+
 function initialize() {
     initMap();
     initThree();
     strada.init(function(objects){
+        
         /*        addObjects(objects, {svarhetsgrad:'Lindrig olycka', ljusforhallande: "Dagsljus", });
         setTimeout(function(){
             clearObjects();
@@ -20,7 +29,7 @@ function initialize() {
         }, 2000);
         */
         addObjects(objects, {});
-    });
+    })
 }
 
 
@@ -49,42 +58,73 @@ function clearObjects(){
     }
 }
 
-function colorObjects(objects, colorMap){
+function colorMeshes(meshes, colorMap){
     Object.keys(colorMap).forEach(function(key){
-        colorMap[key].forEach(function(colorObject){
-            coloredObjects = filterObjects(objects, {key:colorObject.value});
-            forEach(coloredObjects, function(colObject){
-                colObject.material.color.setHex(colorObject.color)
+        unfiltered = meshes
+        colorMap[key].maps.forEach(function(colorObject){
+            filterinput = new Object();
+            filterinput[key] = colorObject.value;
+            filter = filterMeshes(unfiltered, filterinput);
+            colorFilter = filter.filtered;
+            unfiltered = filter.unfiltered;
+            colorFilter.forEach(function(mesh){
+                mesh.material.color.setHex(colorObject.color)
             });
-        if(colorMap[key].defaultColor){
-            //Implement if absolutely neccessary, seems a pain and bother to do.
-        }});
+            if(colorMap[key].defaultColor){
+                unfiltered.forEach(function(mesh){
+                    mesh.material.color.setHex(colorMap[key].defaultColor);
+                });
+            }
+        });
     });
 }
 
-function filterObjects(objects, filter){
+function filterMeshes(meshes, filter){
     if(Object.keys(filter).length === 0){
-        return objects;
+        return meshes;
     }
+    console.log(filter);
+    var unfilt = [], filt = [];
     Object.keys(filter).forEach(function(key){
-        objects = objects.filter(function(object){
-            if(object[key] == filter[key]){
-                return true;
+        meshes.forEach(function(mesh){
+
+            if(mesh.stradaData === undefined){
+                return;
             }
-        })
+            if(mesh.stradaData[key] === filter[key]){
+                filt.push(mesh);
+                return;
+            }
+            unfilt.push(mesh);
+        });
     });
-    return objects
+    return {filtered:filt, 
+            unfiltered:unfilt
+           };
+}
+
+function filterVisibleMeshes(meshes, filter){
+    filter = filterMeshes(meshes, filter);
+    filter.unfiltered.forEach(function(mesh){
+        mesh.visible = false;
+        mesh.hiddenByFilter = true;
+    });
+    filter.filtered.forEach(function(mesh){
+        mesh.visible = true;
+        mesh.hiddenByFilter = false;
+    });
+    return filter
 }
 
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
-    objects = filterObjects(objects, filter);
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
         if (k > 800)
             return;
         var mesh, material;
+
 
         switch (v['svarhetsgrad'][0]) {
         case 'L':
@@ -110,13 +150,14 @@ function addObjects(objects, filter) {
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
 
     });
-
 }
 
 
 function updateObjects() {
     scene.children.forEach(function (c) {
-        
+        if (c.hiddenByFilter){
+            return;
+        }
         if (c.stradaData) {
             if (c.position.x > eBound || c.position.x < wBound) {
                 c.visible = false;
@@ -174,14 +215,7 @@ function updateCamera () {
 
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
-    
-    var obj = document.getElementById('map-canvas');
-    console.log(obj.style);
-//    obj.style.MozTransform = obj.style.webkitTransform = 'rotate3D(45deg,0,0) perspective(700px)';
-//    console.log(obj.style.MozTransform);
 
-    var container = document.getElementById('three-canvas');
-    renderer.setSize($(container).width(), $(container).height());    
 //    camera.updateMatrix();
 //    camera.updateMatrixWorld();
 
@@ -250,7 +284,7 @@ function replaceSlab(x, y, width, height) {
     }
     var mat = new THREE.MeshBasicMaterial({color: 0x00aa00, opacity: 0.5});
     slab = new THREE.Mesh(new THREE.CubeGeometry(width, height, 0.0001), mat);
-    scene.add(slab);
+//    scene.add(slab);
     slab.position.set(linkoping.x, linkoping.y, 0);
     slab.position.set(x, y, 0);
 }
