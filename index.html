@@ -11,6 +11,7 @@
     <script type="text/javascript"
             src="lib/three.js">
     </script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
     <script type="text/javascript" src="lib/detector.js"></script>
     <script type="text/javascript" src="lib/stats.js"></script>
     <script type="text/javascript" src="lib/jQueryRotate.js"></script>
@@ -40,6 +41,8 @@
     <link rel="stylesheet" href="css/main.css">
 
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <script src="lib/jquery-ui-1.10.3.custom.min.js"></script>
+
   </head>
   
   <body>
@@ -47,54 +50,73 @@
         <div class="container">
           <div class="col-lg-4">
             <h3>Filtrera efter olyckstyp</h3>
-            <li><a href="">Singelolycka</a></li>
-            <li><a href="">Mötesolycka</a></li>
-            <li><a href="">Omkörningsolycka</a></li>
-            <li><a href="">Upphinnandeolycka</a></li>
-            <li><a href="">Avsvängningsolycka</a></li>
-            <li><a href="">Cykel/Moped kollision med m.fordon</a></li>
-            <li><a href="">Viltolycka</a></li>
-            <li><a href="">Visa allt</a></li>
+            <div><input type="checkbox" id="S" /><label for="S">Singelolycka</label></div>
+            <div><input type="checkbox" id="M" /><label for="S">Mötesolycka</label></div>
+            <div><input type="checkbox" id="O" /><label for="S">Omkörningsolycka<label></div>
+            <div><input type="checkbox" id="U" /><label for="S">Upphinnandeolycka</label></div>
+            <div><input type="checkbox" id="A" /><label for="S">Avsvängningsolycka</label></div>
+            <div><input type="checkbox" id="C" /><label for="S">Cykel/Moped kollision med m.fordon</label></div>
+            <div><input type="checkbox" id="V" /><label for="S">Viltolycka</label></div>
+            <div><input type="checkbox" id="all" /><label for="S">Visa allt</label></div>
           </div>
           <div class="col-lg-2">
-            <h3>väglag</h3>
-            <li><a href="">
-                <li><a href="">Lös</a></li>
-                <li><a href="">snö/snömodd</a></li>
-                <li><a href="">Tjock is/ packad snö</a></li>
-                <li><a href="">Tunn is / vägbanan synlig</a></li>
-                <li><a href="">Vägbanan torr/fuktig</a></li>
-                <li><a href="">Vägbanan torr</a></li>
-            </a></li>
+            <h3>Väglag</h3>
+            <ul>
+                <li>Lös snö</li>
+                <li>snö/snömodd</li>
+                <li>Tjock is/ packad snö</li>
+                <li>Tunn is / vägbanan synlig</li>
+                <li>Vägbanan torr/fuktig</li>
+                <li>Vägbanan torr</li>
+            </ul>
           </div>
 
           <div class="col-lg-2">
-            <h3>ljus</h3>
-
-            <li><a href="">Dagsljus</a></li>
-            <li><a href="">Gryning/skymning</a></li>
-            <li><a href="">Mörker</a></li>
-            <li><a href="">Okänt</a></li>
-            <li><a href=""></a></li>         
+            <h3>Ljus</h3>
+            <ul>
+            <li>Dagsljus</li>
+            <li>Gryning/skymning</li>
+            <li>Mörker</li>
+            <li>Okänt</li>
+            </ul>
           </div>
           <div class="col-lg-2">
             <h3>Väderlek</h3>
-            <li><a href="">Dis/dimma</a></li>
-            <li><a href="">Regn</a></li>
-            <li><a href="">Snöblandat regn</a></li>
-            <li><a href="">Snöfall</a></li>
-            <li><a href="">Uppehållsväder</a></li>
-            <li><a href="">Okänt</a></li>
+            <ul>
+            <li>Dis/dimma</li>
+            <li>Regn</li>
+            <li>Snöblandat regn</li>
+            <li>Snöfall</li>
+            <li>Uppehållsväder</li>
+            <li>Okänt</li>
+            </ul>
           </div>
 
           <div class="col-lg-2">
-            <h3>utång</h3>
-            <li><a href="">Dödsolycka</a></li>
-            <li><a href="">Svår olycka</a></li>
-            <li><a href="">Lindrig olycka</a></li>
-
+            <h3>Utgång</h3>
+            <ul>
+            <li>Dödsolycka</li>
+            <li>Svår olycka</li>
+            <li>Lindrig olycka</li>
+            </ul>
           </div>
-
+        </div>
+        <div class="container">
+          <div id="slider-range"></div>
+          <table id="slider-labels">
+            <tr>
+            <td>2003</td>
+            <td>2004</td>
+            <td>2005</td>
+            <td>2006</td>
+            <td>2007</td>
+            <td>2008</td>
+            <td>2009</td>
+            <td>2010</td>
+            <td>2011</td>
+            <td>2012</td>
+            <tr>
+          </table>
         </div>
     </div>
 

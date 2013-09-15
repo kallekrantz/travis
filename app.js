@@ -80,55 +80,92 @@ function colorMeshes(meshes, colorMap){
 }
 
 function filterMeshes(meshes, filter){
-    if(Object.keys(filter).length === 0){
-        return meshes;
-    }
-    console.log(filter);
     var unfilt = [], filt = [];
+    var firstrun = true;
+    if(Object.keys(filter).length === 0){
+        return {filtered:meshes, unfiltered:unfilt};
+    }
     Object.keys(filter).forEach(function(key){
-        meshes.forEach(function(mesh){
-
-            if(mesh.stradaData === undefined){
-                return;
-            }
-            if(mesh.stradaData[key] === filter[key]){
-                filt.push(mesh);
-                return;
-            }
-            unfilt.push(mesh);
+        if (firstrun == false){
+            meshes = filt;
+            filt = []
+        }
+        if (typeof filter[key] === 'string'){
+            filter[key] = [filter[key]];
+        }
+        if (typeof filter[key] === 'number'){
+            filter[key] = [filter[key]];
+        }
+        if(filter[key].length === 0){
+            return;
+        }
+        filter[key].forEach(function(singleFilter){
+            console.log(key + " " + singleFilter );
+            meshes.forEach(function(mesh){
+                if(mesh.foundInFilter === true){
+                    return;
+                }
+                mesh.foundInFilter = false;
+                if(mesh.stradaData === undefined){
+                    return;
+                }
+                if(mesh.stradaData[key] === singleFilter){
+                    mesh.foundInFilter = true;
+                    return;
+                }
+            });
         });
+        meshes.forEach(function(mesh){
+            if(mesh.foundInFilter === true){
+                filt.push(mesh);
+            }
+            if(mesh.foundInFilter === false){
+                unfilt.push(mesh);
+            }
+            mesh.foundInFilter = undefined;
+        });
+        firstrun = false;
     });
     return {filtered:filt,
             unfiltered:unfilt
            };
 }
 
+function filterColoredMeshed(attribute, optionList, defColor){
+    colorMeshes(scene.children, {attribute: {maps: optionList, defaultColor:defColor}});
+}
+
 function filterVisibleMeshes(meshes, filter){
-    filter = filterMeshes(meshes, filter);
-    filter.unfiltered.forEach(function(mesh){
+    filtered = filterMeshes(meshes, filter);
+    filtered.unfiltered.forEach(function(mesh){
         mesh.visible = false;
         mesh.hiddenByFilter = true;
     });
-    filter.filtered.forEach(function(mesh){
+    filtered.filtered.forEach(function(mesh){
         mesh.visible = true;
         mesh.hiddenByFilter = false;
     });
-    return filter
+    return filtered
 }
+
 function yearFilter(year){
     return filterVisibleMeshes(scene.children, {ar:year});
 }
+
 function monthFilter(month){
     return filterVisibleMeshes(scene.children, {manad:month});
 }
+
 function monthAndYearFilter(year, month){
     return filterVisibleMeshes(scene.children, {ar:year, manad:month});
+}
+function accidentFilter(selected, startYear, endYear){
+    return filterVisibleMeshes(scene.children, {olyckstyp:selected, ar:spanYear(startYear, endYear)})
 }
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
-        //        mesh.position = new THREE.Vector3(x, y, 0);
         if (k > 20)
             return;
         var mesh, material;
@@ -160,6 +197,13 @@ function addObjects(objects, filter) {
     });
 }
 
+function spanYear(begin, end){
+    var out = [];
+    for(var i = begin; i <=end; i++){
+        out.push(i);
+    }
+    return out;
+}
 
 function updateObjects() {
     scene.children.forEach(function (c) {
@@ -303,6 +347,7 @@ function replaceSlab(x, y, width, height) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
+    
     $(window).resize(function () {
         updateCamera();
     });
