@@ -398,7 +398,7 @@ function visRoad()
     var attribute = "vaglag";
     var colorMap = [
         {
-            color: 0xFFFFFF,
+            color: 0x444444,
             value: "Vagbanan torr"
         },
         {
@@ -406,11 +406,11 @@ function visRoad()
             value: "Vagbanan vat/fuktig"
         },
         {
-            color: 0x4444FF,
+            color: 0xAAAAAA,
             value: "Tunn is, vagbanan synlig"
         },
         {
-            color: 0xAAAAAA,
+            color: 0x4444FF,
             value: "Tjock is / packad sno"
         },
         {
@@ -451,7 +451,7 @@ function visWeather() {
     var attribute = "vaderleksforhallanden";
     var colorMap = [
         {
-            color: 0xAAAAAA,
+            color: 0xFFFF00,
             value: "Uppehallsvader"
         },
         {
@@ -459,16 +459,16 @@ function visWeather() {
             value: "Regn"
         },
         {
-            color: 0x88BBBB,
+            color: 0xAAAAAA,
             value: "Dis/dimma"
         },
         {
-            color: 0xFFFF00,
+            color: 0x88BBBB,
             value: "Snoblandat regn"
         },
         {
-            color: 0xFF00FF,
-            value: "Snofall"
+            color: 0xFFFFFF,
+            value: ["Snofall", "Sno"]
         }
     ]
     var defaultColor = 0xFF00FF;
