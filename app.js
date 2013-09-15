@@ -59,7 +59,6 @@ function clearObjects(){
 }
 
 function colorMeshes(meshes, colorMap){
-    console.log(colorMap);
     Object.keys(colorMap).forEach(function(key){
         unfiltered = meshes
         colorMap[key].maps.forEach(function(colorObject){
@@ -172,12 +171,12 @@ function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
-        if (k > 20000)
+        if (k > 500)
             return;
         var mesh, material;
+        material = new THREE.MeshLambertMaterial();
 
-
-        switch (v['svarhetsgrad'][0]) {
+/*        switch (v['svarhetsgrad'][0]) {
         case 'L':
             material = slightMaterial;
             break;
@@ -190,9 +189,12 @@ function addObjects(objects, filter) {
         default:
             material = defaultMaterial;
             break;
+        
 
-        }
-
+        }*/
+        
+        visRoad();
+        
         mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.set(-Math.PI/2, 0, 0);
         mesh.scale.set(1, 1, 1/2);
