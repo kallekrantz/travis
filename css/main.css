@@ -1,0 +1,7 @@
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+#map-canvas { position: absolute; height: 100%; width: 100% }
+#three-canvas { position: absolute; height: 100%; width: 100%; pointer-events:none;} 
+
+.filter-box { position: absolute; height: 500px; width: 100%; }
