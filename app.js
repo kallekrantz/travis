@@ -81,15 +81,10 @@ function addObjects(objects, filter) {
     var i = 0;
     objects = filterObjects(objects, filter);
     objects.forEach(function (v, k) {
-<<<<<<< HEAD
 //        mesh.position = new THREE.Vector3(x, y, 0);
         if (k > 800)
             return;
-=======
->>>>>>> 36e87bb88e98be415c32b87caab024507eabc9ac
         var mesh, material;
-        if (k > 80)
-            return;
 
         switch (v['svarhetsgrad'][0]) {
         case 'L':
