@@ -7,3 +7,5 @@ body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
               transform: perspective( 700px ) rotateX( 45deg );
             }
 #three-canvas { position: absolute; height: 100%; width: 100%; pointer-events:none;} 
+
+.filter-box { position: absolute; margin: 50px; padding: 50px; height: 20%; width: 20% }
