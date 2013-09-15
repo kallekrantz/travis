@@ -115,13 +115,21 @@ function filterVisibleMeshes(meshes, filter){
     });
     return filter
 }
-
+function yearFilter(year){
+    return filterVisibleMeshes(scene.children, {ar:year});
+}
+function monthFilter(month){
+    return filterVisibleMeshes(scene.children, {manad:month});
+}
+function monthAndYearFilter(year, month){
+    return filterVisibleMeshes(scene.children, {ar:year, manad:month});
+}
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
-        if (k > 100)
+        if (k > 30000)
             return;
         var mesh, material;
 
