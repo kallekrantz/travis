@@ -80,22 +80,37 @@ function colorMeshes(meshes, colorMap){
 }
 
 function filterMeshes(meshes, filter){
-    if(Object.keys(filter).length === 0){
-        return meshes;
-    }
-    console.log(filter);
     var unfilt = [], filt = [];
+    if(Object.keys(filter).length === 0){
+        return {filtered:meshes, unfiltered:unfilt};
+    }
     Object.keys(filter).forEach(function(key){
+        if (typeof filter[key] === 'string'){
+            filter[key] = [filter[key]];
+        }
+        filter[key].forEach(function(singleFilter){
+            meshes.forEach(function(mesh){
+                if(mesh.foundInFilter === true){
+                    return;
+                }
+                mesh.foundInFilter = false;
+                if(mesh.stradaData === undefined){
+                    return;
+                }
+                if(mesh.stradaData[key] === singleFilter){
+                    mesh.foundInFilter = true;
+                    return;
+                }
+            });
+        });
         meshes.forEach(function(mesh){
-
-            if(mesh.stradaData === undefined){
-                return;
-            }
-            if(mesh.stradaData[key] === filter[key]){
+            if(mesh.foundInFilter === true){
                 filt.push(mesh);
-                return;
             }
-            unfilt.push(mesh);
+            if(mesh.foundInFilter === false){
+                unfilt.push(mesh);
+            }
+            mesh.foundInFilter = false;
         });
     });
     return {filtered:filt, 
@@ -103,33 +118,46 @@ function filterMeshes(meshes, filter){
            };
 }
 
+function filterColoredMeshed(attribute, optionList, defColor){
+    colorMeshes(scene.children, {attribute: {maps: optionList, defaultColor:defColor}});
+}
+
 function filterVisibleMeshes(meshes, filter){
-    filter = filterMeshes(meshes, filter);
-    filter.unfiltered.forEach(function(mesh){
+    filtered = filterMeshes(meshes, filter);
+    filtered.unfiltered.forEach(function(mesh){
         mesh.visible = false;
         mesh.hiddenByFilter = true;
     });
-    filter.filtered.forEach(function(mesh){
+    filtered.filtered.forEach(function(mesh){
         mesh.visible = true;
         mesh.hiddenByFilter = false;
     });
-    return filter
+    return filtered
 }
+
 function yearFilter(year){
     return filterVisibleMeshes(scene.children, {ar:year});
 }
+
 function monthFilter(month){
     return filterVisibleMeshes(scene.children, {manad:month});
 }
+
 function monthAndYearFilter(year, month){
     return filterVisibleMeshes(scene.children, {ar:year, manad:month});
 }
+
+function siteFilter(siteType){
+    return filterVisibleMeshes(scene.children, {platstyp:siteType});
+}
+
+
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
-        if (k > 30000)
+        if (k > 300)
             return;
         var mesh, material;
 
