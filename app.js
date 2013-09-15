@@ -1,10 +1,11 @@
 var map  = null;
 var linkoping = new THREE.Vector3(15.631739666978488, 58.40902369960166, 0);
-var apiUrl = 'http://api.apitekt.se/transportstyrelsen/olyckor-2003-2012/list.json';
 var fov = 53.13010235415599;
 var camera, scene, renderer;
-var geometry, material, mesh;
+var geometry, material;
 var slab;
+
+var wBound, sBound, eBound, nBound;
 
 function initialize() {
     initMap();
@@ -24,15 +25,15 @@ function rt2latlon(x, y) {
     return new THREE.Vector3(
         longitude,
         latitude,
-        0
+        0.0008
     );
 }
 
 
 function addObjects(objects) {
-    var i = 0;
+
     objects.forEach(function (v, k) {
-        if (k > 200)
+        if (k > 500)
             return;
         var mesh, material;
 
@@ -53,6 +54,9 @@ function addObjects(objects) {
         }
 
         mesh = new THREE.Mesh(geometry, material);
+        mesh.rotation.set(-Math.PI/2, 0, 0);
+        mesh.scale.set(1, 1, 1/2);
+        mesh.stradaData = v;
         scene.add(mesh);
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
         //        mesh.position = new THREE.Vector3(x, y, 0);
@@ -60,10 +64,29 @@ function addObjects(objects) {
 
 }
 
+
+function updateObjects() {
+    scene.children.forEach(function (c) {
+        
+        if (c.stradaData) {
+            if (c.position.x > eBound || c.position.x < wBound) {
+                c.visible = false;
+            } else {
+                c.visible = true;
+            }
+            
+            if (c.position.y > nBound || c.position.y < sBound) {
+                c.visible = false;
+            }
+        }
+
+    });
+}
+
 function initMap() {
     var mapOptions = {
         center: new google.maps.LatLng(linkoping.y, linkoping.x),
-        zoom: 11,
+        zoom: 14,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
@@ -80,13 +103,13 @@ function updateCamera () {
 
     var xy = map.getCenter();
 
-    var w = map.getBounds().getSouthWest().lng();
-    var s = map.getBounds().getSouthWest().lat();
-    var e = map.getBounds().getNorthEast().lng();
-    var n = map.getBounds().getNorthEast().lat();
+    wBound = map.getBounds().getSouthWest().lng();
+    sBound = map.getBounds().getSouthWest().lat();
+    eBound = map.getBounds().getNorthEast().lng();
+    nBound = map.getBounds().getNorthEast().lat();
 
-    var width = e - w;
-    var height = n - s;
+    var width = eBound - wBound;
+    var height = nBound - sBound;
 
     camera.position.set(
         xy.lng(),
@@ -103,8 +126,8 @@ function updateCamera () {
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
 
-    camera.updateMatrix();
-    camera.updateMatrixWorld();
+//    camera.updateMatrix();
+//    camera.updateMatrixWorld();
 
 }
 
@@ -119,12 +142,12 @@ function initThree() {
 
         camera = new THREE.PerspectiveCamera( fov, 1 //window.innerWidth / window.innerHeight
                                               , 0.0000001, 10000 );
-
-
         scene = new THREE.Scene();
 
 
-        geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
+ //       geometry = new THREE.CubeGeometry( 0.002, 0.001, 0.002 );
+//        geometry = new THREE.CylinderGeometry(0, 30, 80, 4, 1, true);
+        geometry = new THREE.CylinderGeometry(0, 0.001, 0.002, 10, 1, false);
 
         deathMaterial = new THREE.MeshLambertMaterial( { color: 0xff0000 } );
         severeMaterial = new THREE.MeshLambertMaterial( { color: 0xffff00 } );
@@ -150,24 +173,15 @@ function initThree() {
         renderer.setSize($(container).width(), $(container).height());
 
         container.appendChild( renderer.domElement );
-
-
-
     }
 
 
 
     function animate() {
-
-        // note: three.js includes requestAnimationFrame shim
-        requestAnimationFrame( animate );
-
-        //        mesh.rotation.x += 0.01;
-        //        mesh.rotation.y += 0.02;
+        requestAnimationFrame(animate);
         updateCamera();
-
-        renderer.render( scene, camera );
-
+        updateObjects();
+        renderer.render(scene, camera);
     }
 }
 
@@ -181,17 +195,8 @@ function replaceSlab(x, y, width, height) {
     var mat = new THREE.MeshBasicMaterial({color: 0x00aa00, opacity: 0.5});
     slab = new THREE.Mesh(new THREE.CubeGeometry(width, height, 0.0001), mat);
 //    scene.add(slab);
-//    slab.position.set(x, y, 0);
-//    console.log(x);
-//    console.log(y);
-
     slab.position.set(linkoping.x, linkoping.y, 0);
     slab.position.set(x, y, 0);
-
-    
-//    console.log(x);
-  
-//  console.log(y);
 }
 
 
@@ -200,9 +205,7 @@ function replaceSlab(x, y, width, height) {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
-    console.log("woot");
     $(window).resize(function () {
         updateCamera();
-
     });
 });
