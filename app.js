@@ -71,7 +71,9 @@ function colorMeshes(meshes, colorMap){
                 mesh.material.color.setHex(colorObject.color)
             });
             if(colorMap[key].defaultColor){
+              
                 unfiltered.forEach(function(mesh){
+                    if(mesh.material)
                     mesh.material.color.setHex(colorMap[key].defaultColor);
                 });
             }
@@ -166,7 +168,7 @@ function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
     objects.forEach(function (v, k) {
-        if (k > 20)
+        if (k > 20000)
             return;
         var mesh, material;
 
@@ -411,7 +413,7 @@ function visRoad()
         }
     ];
     var defaultColor = 0xFF00FF;
-    filterColorMeshes(attribute, colorMap, defaultColor)
+    filterColoredMeshes(attribute, colorMap, defaultColor)
 
 }
 
@@ -435,7 +437,7 @@ function visLight() {
         }
     ]
     var defaultColor = 0xFF00FF;
-    filterColorMeshes(attribute, colorMap, defaultColor);
+    filterColoredMeshes(attribute, colorMap, defaultColor);
 }
 
 
@@ -465,7 +467,7 @@ function visWeather() {
         }
     ]
     var defaultColor = 0xFF00FF;
-    filterColorMeshes(attribute, colorMap, defaultColor);
+    filterColoredMeshes(attribute, colorMap, defaultColor);
 }
 
 
@@ -487,7 +489,7 @@ function visOutcome() {
         }
     ]
     var defaultColor = 0xFF00FF;
-    filterColorMeshes(attribute, colorMap, defaultColor);
+    filterColoredMeshes(attribute, colorMap, defaultColor);
 }
 
 function updateFilter(){
