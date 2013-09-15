@@ -121,7 +121,7 @@ function addObjects(objects, filter) {
     var i = 0;
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
-        if (k > 800)
+        if (k > 100)
             return;
         var mesh, material;
 
