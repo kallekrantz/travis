@@ -11,6 +11,7 @@ function initialize() {
     initMap();
     initThree();
     strada.init(function(objects){
+        
         /*        addObjects(objects, {svarhetsgrad:'Lindrig olycka', ljusforhallande: "Dagsljus", });
         setTimeout(function(){
             clearObjects();
@@ -20,6 +21,13 @@ function initialize() {
         }, 2000);
         */
         addObjects(objects, {});
+        setTimeout(function(){
+            filterVisibleMeshes(scene.children, {svarhetsgrad:'Lindrig olycka'});
+            setTimeout(function(){
+                filterVisibleMeshes(scene.children, {ljusforhallande: "Dagsljus"});
+            }, 1000);
+        }, 2000);
+        
     });
 }
 
@@ -49,11 +57,11 @@ function clearObjects(){
     }
 }
 
-function colorObjects(objects, colorMap){
+function colorMeshes(meshes, colorMap){
     Object.keys(colorMap).forEach(function(key){
         colorMap[key].forEach(function(colorObject){
-            coloredObjects = filterObjects(objects, {key:colorObject.value});
-            forEach(coloredObjects, function(colObject){
+            coloredObjects = filterObjects(meshes, {key:colorObject.value});
+            forEach(meshes, function(mesh){
                 colObject.material.color.setHex(colorObject.color)
             });
         if(colorMap[key].defaultColor){
@@ -62,29 +70,50 @@ function colorObjects(objects, colorMap){
     });
 }
 
-function filterObjects(objects, filter){
+function filterMeshes(meshes, filter){
     if(Object.keys(filter).length === 0){
-        return objects;
+        console.log("No filter present!");
+        return meshes;
     }
+    var unfilt = [], filt = [];
     Object.keys(filter).forEach(function(key){
-        objects = objects.filter(function(object){
-            if(object[key] == filter[key]){
-                return true;
+        meshes.forEach(function(mesh){
+            if(mesh.stradaData === undefined){
+                return;
             }
-        })
+            if(mesh.stradaData[key] == filter[key]){
+                filt.push(mesh);
+                return;
+            }
+            unfilt.push(mesh);
+        });
     });
-    return objects
+    return {filtered:filt, 
+            unfiltered:unfilt
+           };
+}
+
+function filterVisibleMeshes(meshes, filter){
+    filter = filterMeshes(meshes, filter);
+    filter.unfiltered.forEach(function(mesh){
+        mesh.visible = false;
+        mesh.hiddenByFilter = true;
+    });
+    filter.filtered.forEach(function(mesh){
+        mesh.visible = true;
+        mesh.hiddenByFilter = false;
+    });
 }
 
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
-    objects = filterObjects(objects, filter);
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
         if (k > 800)
             return;
         var mesh, material;
+
 
         switch (v['svarhetsgrad'][0]) {
         case 'L':
@@ -110,13 +139,14 @@ function addObjects(objects, filter) {
         mesh.position = rt2latlon(v['x-koordinat'], v['y-koordinat']);
 
     });
-
 }
 
 
 function updateObjects() {
     scene.children.forEach(function (c) {
-        
+        if (c.hiddenByFilter){
+            return;
+        }
         if (c.stradaData) {
             if (c.position.x > eBound || c.position.x < wBound) {
                 c.visible = false;
