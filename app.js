@@ -10,16 +10,7 @@ function initialize() {
     initMap();
     initThree();
     strada.init(function(objects){
-        addObjects(objects, {svarhetsgrad:'Lindrig olycka', ljusforhallande: "Dagsljus", });
-        setTimeout(function(){
-            clearObjects();
-            setTimeout(function(){
-                addObjects(objects, {svarhetsgrad:'Lindrig olycka'});
-            },2000);
-        }, 2000);
-        
-        
-
+        addObjects(objects, {svarhetsgrad:'Sv\u00e5r olycka'});
     });
 }
 
@@ -49,6 +40,19 @@ function clearObjects(){
     }
 }
 
+function colorObjects(objects, colorMap){
+    Object.keys(colorMap).forEach(function(key){
+        colorMap[key].forEach(function(colorObject){
+            coloredObjects = filterObjects(objects, {key:colorObject.value});
+            forEach(coloredObjects, function(colObject){
+                colObject.material.color.setHex(colorObject.color)
+            });
+        if(colorMap[key].defaultColor){
+            //Implement if absolutely neccessary, seems a pain and bother to do.
+        }});
+    });
+}
+
 function filterObjects(objects, filter){
     if(Object.keys(filter).length === 0){
         return objects;
@@ -66,12 +70,10 @@ function filterObjects(objects, filter){
 function addObjects(objects, filter) {
     (typeof filter === "undefined") ? {} : filter;
     var i = 0;
-    console.log(objects.length);
     objects = filterObjects(objects, filter);
-    console.log(objects.length);
     objects.forEach(function (v, k) {
 //        mesh.position = new THREE.Vector3(x, y, 0);
-        if (k > 200)
+        if (k > 800)
             return;
         var mesh, material;
         
