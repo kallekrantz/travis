@@ -7,6 +7,14 @@ var slab;
 
 var wBound, sBound, eBound, nBound;
 
+function encode_utf8(s) {
+  return unescape(encodeURIComponent(s));
+}
+
+function decode_utf8(s) {
+  return decodeURIComponent(escape(s));
+}
+
 function initialize() {
     initMap();
     initThree();
@@ -21,14 +29,7 @@ function initialize() {
         }, 2000);
         */
         addObjects(objects, {});
-        setTimeout(function(){
-            filterVisibleMeshes(scene.children, {svarhetsgrad:'Lindrig olycka'});
-            setTimeout(function(){
-                filterVisibleMeshes(scene.children, {ljusforhallande: "Dagsljus"});
-            }, 1000);
-        }, 2000);
-        
-    });
+    })
 }
 
 
@@ -59,29 +60,38 @@ function clearObjects(){
 
 function colorMeshes(meshes, colorMap){
     Object.keys(colorMap).forEach(function(key){
-        colorMap[key].forEach(function(colorObject){
-            coloredObjects = filterObjects(meshes, {key:colorObject.value});
-            forEach(meshes, function(mesh){
-                colObject.material.color.setHex(colorObject.color)
+        unfiltered = meshes
+        colorMap[key].maps.forEach(function(colorObject){
+            filterinput = new Object();
+            filterinput[key] = colorObject.value;
+            filter = filterMeshes(unfiltered, filterinput);
+            colorFilter = filter.filtered;
+            unfiltered = filter.unfiltered;
+            colorFilter.forEach(function(mesh){
+                mesh.material.color.setHex(colorObject.color)
             });
-        if(colorMap[key].defaultColor){
-            //Implement if absolutely neccessary, seems a pain and bother to do.
-        }});
+            if(colorMap[key].defaultColor){
+                unfiltered.forEach(function(mesh){
+                    mesh.material.color.setHex(colorMap[key].defaultColor);
+                });
+            }
+        });
     });
 }
 
 function filterMeshes(meshes, filter){
     if(Object.keys(filter).length === 0){
-        console.log("No filter present!");
         return meshes;
     }
+    console.log(filter);
     var unfilt = [], filt = [];
     Object.keys(filter).forEach(function(key){
         meshes.forEach(function(mesh){
+
             if(mesh.stradaData === undefined){
                 return;
             }
-            if(mesh.stradaData[key] == filter[key]){
+            if(mesh.stradaData[key] === filter[key]){
                 filt.push(mesh);
                 return;
             }
@@ -103,6 +113,7 @@ function filterVisibleMeshes(meshes, filter){
         mesh.visible = true;
         mesh.hiddenByFilter = false;
     });
+    return filter
 }
 
 function addObjects(objects, filter) {
