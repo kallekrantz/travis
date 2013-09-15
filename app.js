@@ -342,8 +342,6 @@ function replaceSlab(x, y, width, height) {
 }
 
 
-
-
 google.maps.event.addDomListener(window, 'load', initialize);
 
 $(document).ready(function() {
@@ -354,6 +352,7 @@ $(document).ready(function() {
 });
 
 
+var sliderValues = [2003, 2012];
 $(function() {
     $('.vis-select').css('opacity', 0.2);
 
@@ -368,15 +367,15 @@ $(function() {
         range: true,
         min: 2003,
         max: 2012,
-        values: [ 2006, 2012 ],
+        values: sliderValues,
         slide: function( event, ui ) {
-            //            $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-            console.log("yo");
+            sliderValues = ui.values;
+            updateFilter();
         }
     });
-//    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
- //                       " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+
 });
+
 
 
 function makeSelection(id) {
@@ -407,3 +406,22 @@ function visWeather() {
 function visOutcome() {
     makeSelection('#outcomeSelect');
 }
+
+function updateFilter(){
+    var elements = []
+    if($("#S").prop('checked')) elements.push("S");
+    if($("#M").prop('checked')) elements.push("M");
+    if($("#O").prop('checked')) elements.push("O");
+    if($("#U").prop('checked')) elements.push("U");
+    if($("#A").prop('checked')) elements.push("A");
+    if($("#K").prop('checked')) elements.push("K");
+    if($("#C").prop('checked')) elements.push("C");
+    if($("#F").prop('checked')) elements.push("F");
+    if($("#V").prop('checked')) elements.push("V");
+    if($("#W").prop('checked')) elements.push("W");
+    var startYear = sliderValues[0];
+    var endYear = sliderValues[1];
+    accidentFilter(elements, startYear, endYear);
+}
+
+
