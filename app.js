@@ -59,9 +59,11 @@ function clearObjects(){
 }
 
 function colorMeshes(meshes, colorMap){
+    console.log(colorMap);
     Object.keys(colorMap).forEach(function(key){
         unfiltered = meshes
         colorMap[key].maps.forEach(function(colorObject){
+            console.log(colorObject);
             filterinput = new Object();
             filterinput[key] = colorObject.value;
             filter = filterMeshes(unfiltered, filterinput);
@@ -102,7 +104,6 @@ function filterMeshes(meshes, filter){
             return;
         }
         filter[key].forEach(function(singleFilter){
-            console.log(key + " " + singleFilter );
             meshes.forEach(function(mesh){
                 if(mesh.foundInFilter === true){
                     return;
@@ -134,7 +135,10 @@ function filterMeshes(meshes, filter){
 }
 
 function filterColoredMeshes(attribute, optionList, defColor){
-    colorMeshes(scene.children, {attribute: {maps: optionList, defaultColor:defColor}});
+    temp = {};
+    temp[attribute] = {maps:optionList, defaultColor:defColor};
+    colorMeshes(scene.children, temp);
+//    colorMeshes(scene.children, {attribute: {maps: optionList, defaultColor:defColor}});
 }
 
 function filterVisibleMeshes(meshes, filter){
@@ -414,7 +418,6 @@ function visRoad()
     ];
     var defaultColor = 0xFF00FF;
     filterColoredMeshes(attribute, colorMap, defaultColor)
-
 }
 
 
@@ -476,15 +479,15 @@ function visOutcome() {
     var attribute = "svarhetsgrad";
     var colorMap = [
         {
-            color: 0xFF0000,
+            color: 0x00AA00,
             value: "Lindrig olycka"
         },
         {
-            color: 0xFFFF00,
+            color: 0xFF0000,
             value: "Dodsolycka"
         },
         {
-            color: 0x00AA00,
+            color: 0xFFFF00,
             value: "Svar olycka"
         }
     ]
