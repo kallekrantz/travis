@@ -164,7 +164,14 @@ function updateCamera () {
 
     camera.aspect = width/height;
     camera.updateProjectionMatrix();
+    
+    var obj = document.getElementById('map-canvas');
+    console.log(obj.style);
+//    obj.style.MozTransform = obj.style.webkitTransform = 'rotate3D(45deg,0,0) perspective(700px)';
+//    console.log(obj.style.MozTransform);
 
+    var container = document.getElementById('three-canvas');
+    renderer.setSize($(container).width(), $(container).height());    
 //    camera.updateMatrix();
 //    camera.updateMatrixWorld();
 
@@ -233,7 +240,7 @@ function replaceSlab(x, y, width, height) {
     }
     var mat = new THREE.MeshBasicMaterial({color: 0x00aa00, opacity: 0.5});
     slab = new THREE.Mesh(new THREE.CubeGeometry(width, height, 0.0001), mat);
-//    scene.add(slab);
+    scene.add(slab);
     slab.position.set(linkoping.x, linkoping.y, 0);
     slab.position.set(x, y, 0);
 }
